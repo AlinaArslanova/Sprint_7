@@ -20,8 +20,13 @@ public class CourierTests {
     }
 
     @After
-    public void cleanUp() {
-        courier.deleteCourier(courierId);
+    public void deleteCourier() {
+        if (courierId != 0) {
+            courier.deleteCourier(courierId);
+            System.out.println("Удален - " + courierId);
+        } else {
+            System.out.println("Не удалось удалить курьера, так как ID не найден");
+        }
     }
 
     @Test

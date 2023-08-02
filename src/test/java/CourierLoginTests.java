@@ -5,6 +5,7 @@ import io.qameta.allure.Description;
 import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.ValidatableResponse;
 import org.junit.Before;
+import org.junit.After;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -17,6 +18,16 @@ public class CourierLoginTests {
     @Before
     public void setUp() {
         courier = new Courier();
+    }
+
+    @After
+    public void deleteCourier() {
+        if (courierId != 0) {
+            courier.deleteCourier(courierId);
+            System.out.println("Удален - " + courierId);
+        } else {
+            System.out.println("Не удалось удалить курьера, так как ID не найден");
+        }
     }
 
     @Test
