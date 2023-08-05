@@ -55,11 +55,13 @@ public class CourierTests {
     @Description("Запрос возвращает статус код - 409 и с сообщением что логин уже используется")
     public void checkNotCreateTwoIdenticalCouriers() {
         courier.createCourier(CourierGenerator.getDefault());
-        courier.loginCourier(CourierCredentials.from(CourierGenerator.getDefault()));
         ValidatableResponse responseNotCreate = courier.createCourier(CourierGenerator.getDefault());
         int doubleStatusCode = responseNotCreate.extract().statusCode();
         assertEquals("Некорректный статус код", 409, doubleStatusCode);
         String message = responseNotCreate.extract().path("message");
         assertEquals("Этот логин уже используется. Попробуйте другой.", message);
+        ValidatableResponse loginResponse = courier.loginCourier(CourierCredentials.from(CourierGenerator.getDefault()));
+        courierId = loginResponse.extract().path("id");
+
     }
 }

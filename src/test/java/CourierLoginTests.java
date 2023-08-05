@@ -34,8 +34,8 @@ public class CourierLoginTests {
     @DisplayName("Курьер может авторизоваться")
     @Description("Запрос возвращает id и статус код 200")
     public void courierCanLogin() {
-        ValidatableResponse loginResponse = courier
-                .loginCourier(CourierCredentials.from(CourierGenerator.getRegisteredCourier()));
+        courier.createCourier(CourierGenerator.getDefault());
+        ValidatableResponse loginResponse = courier.loginCourier(CourierCredentials.from(CourierGenerator.getRegisteredCourier()));
         courierId = loginResponse.extract().path("id");
         assertNotNull("Id is null", courierId);
     }
@@ -44,8 +44,7 @@ public class CourierLoginTests {
     @DisplayName("Заполнены не все обязательные поля при авторизации")
     @Description("Запрос возвращает ошибку 400")
     public void loginCourierEmptyPassword() {
-        ValidatableResponse loginResponse = courier
-                .loginCourier(CourierCredentials.from(CourierGenerator.getDefaultWithoutPassword()));
+        ValidatableResponse loginResponse = courier.loginCourier(CourierCredentials.from(CourierGenerator.getDefaultWithoutPassword()));
         int loginStatusCode = loginResponse.extract().statusCode();
         String message = loginResponse.extract().path("message");
         assertEquals("Некорректный статус код", 400, loginStatusCode);
@@ -56,8 +55,7 @@ public class CourierLoginTests {
     @DisplayName("Авторизация под несуществующим пользователем")
     @Description("Запрос возвращает ошибку 404")
     public void wrongLoginCourier() {
-        ValidatableResponse loginResponse = courier
-                .loginCourier(CourierCredentials.from(CourierGenerator.getWrong()));
+        ValidatableResponse loginResponse = courier.loginCourier(CourierCredentials.from(CourierGenerator.getWrong()));
         int loginStatusCode = loginResponse.extract().statusCode();
         String message = loginResponse.extract().path("message");
         assertEquals("Некорректный статус код", 404, loginStatusCode);
